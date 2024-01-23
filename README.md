@@ -12,3 +12,9 @@ ex. `feat/4-make-login-page`
 - ex) `loginPage`, `userAuth` 등
 
 파일명: 페이지 = `camelCase`, 컴포넌트 = `PascalCase`
+
+## .gitmessage 적용법
+
+```bash
+git config commit.template .gitmessage.txt
+```
