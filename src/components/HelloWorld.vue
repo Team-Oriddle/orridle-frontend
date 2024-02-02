@@ -1,10 +1,12 @@
+<!-- TODO: 여기서 소셜로그인 작업하기 -->
+
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
-defineProps<{ msg: string }>()
+defineProps<{ msg: string }>();
 
-const count = ref(0)
+const count = ref(0);
 </script>
 
 <template>
