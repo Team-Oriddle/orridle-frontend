@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import Header from './components/Header.vue';
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <div class="flex flex-row justify-center min-h-screen">
+    <div class="mx-auto w-screen-orridle">
+      <Header></Header>
+      <RouterView></RouterView>
+    </div>
+  </div>
 </template>
 
 <style scoped>
