@@ -20,6 +20,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 받아온 디자인의 최대 너비인 1440px이 넘어가면 화면 중앙정렬시키기 */
+@media (width > 1440px) {
+  :root {
+    display: flex;
+    justify-content: center;
+  }
+}
+
 body {
   margin: 0;
   display: flex;
