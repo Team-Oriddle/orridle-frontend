@@ -1,5 +1,4 @@
-<!-- TODO: 여기서 소셜로그인 작업하기 -->
-
+<!-- TODO: 추후 이 파일 삭제 -->
 <script setup lang="ts">
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
