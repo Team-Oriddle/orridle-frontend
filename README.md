@@ -7,11 +7,11 @@ ex. `feat/4-make-login-page`
 
 ## 폴더명, 파일명 Convention
 
-폴더명: `camelCase` 사용
+폴더명: `snake-case` 사용
 
 - ex) `loginPage`, `userAuth` 등
 
-파일명: 페이지 = `camelCase`, 컴포넌트 = `PascalCase`
+파일명: vue: `PascalCase` 통일, 함수 `camelCase`
 
 ## .gitmessage 적용법
 
