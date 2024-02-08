@@ -1,7 +1,16 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import HelloWorld from '../components/HelloWorld.vue';
 import test from '../components/test.vue';
-import AuthPage from '../pages/Auth/AuthPage.vue';
+import Auth from '../pages/Auth/AuthPage.vue'
+import QuizRoomPage from '../pages/quizRoom/QuizRoomPage.vue'
+import QuizGamePage from '../pages/quizGame/QuizGamePage.vue'
+import QuizAttendpage from '../pages/quizAttend/QuizAttendPage.vue'
+import QuizResultPage from '../pages/quizResult/QuizResultPage.vue'
+import QuizCreatePage from '../pages/quizCreate/QuizCreatePage.vue'
+import Mypage from '../pages/myPage/Mypage.vue'
+import InfoPage from '../pages/info/InfoPage.vue'
+import NoticePage from '../pages/notice/NoticePage.vue'
+import Layout from '../components/Layout.vue'
 
 const routes = [
   {
@@ -15,8 +24,54 @@ const routes = [
   {
     path: '/auth',
     name: 'Auth',
-    component: AuthPage,
+    component: Auth
   },
+  {
+    path: "/quiz",
+    component: Layout,
+    children:[
+      {
+        path: "room",
+        name : 'quizroom',
+        component: QuizRoomPage
+      },
+      {
+        path: "game",
+        name : 'quizgame',
+        component: QuizGamePage
+      },
+      {
+        path: "attend",
+        name : 'quizattend',
+        component: QuizAttendpage
+      },
+      {
+        path: "result",
+        name : 'quizroom',
+        component:  QuizResultPage
+      },
+      {
+        path: "create",
+        name : 'quizroom',
+        component: QuizCreatePage
+      },
+    ]
+  },
+  {
+    path: "/mypage",
+    name: 'mypage',
+    component: Mypage
+  },
+  {
+    path: "/info",
+    name : 'infomation',
+    component: InfoPage
+  },
+  {
+    path: "/notice",
+    name : 'notice',
+    component: NoticePage
+  }
 ];
 
 const router = createRouter({
