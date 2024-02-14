@@ -1,6 +1,6 @@
 <!-- src/pages/Auth/AuthPage.vue -->
 <template>
-  <div class="flex flex-col justify-center w-screen min-h-screen min-w-screen">
+  <div class="flex flex-col justify-center w-screen-orridle min-h-screen min-w-screen">
     <div class="w-full max-w-md mx-auto">
       <h2 class="text-3xl font-extrabold text-center text-gray-900">
         Let's get started!
