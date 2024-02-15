@@ -1,3 +1,4 @@
+<!-- TODO: 추후에 헤더 높이를 상수 처리해서 스타일 관리하기 -->
 <template>
   <header class="w-full">
     <nav class="flex items-center justify-between p-4 bg-orange-400">
