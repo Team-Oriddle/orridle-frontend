@@ -20,7 +20,7 @@ git config commit.template .gitmessage.txt
 ```
 
 ## 폴더 구조 템플릿
-
+``` plain text
 📦pages -> 이 내부에 형식 맞추어 제작(ex. `AuthPage.vue` 라면 `Auth`라고 만들기)
 ┗ 📂Auth
 ┃ ┣ 📂api -> 재사용되지않는 api
@@ -33,3 +33,4 @@ git config commit.template .gitmessage.txt
 ┃ ┣ 📂utils -> 재사용되지않는 함수 모음
 ┃ ┃ ┗ 📜index.ts
 ┃ ┗ 📜AuthPage.vue
+```
