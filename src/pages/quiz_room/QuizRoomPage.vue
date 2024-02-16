@@ -10,12 +10,12 @@
   <main class="container grid w-full h-full grid-cols-12 gap-4 p-4 mx-auto">
     <!-- 좌측 섹션: 참가자 목록, 채팅창(그리드 8개 할당) -->
     <section class="grid col-span-8 grid-rows-2 gap-4 bg-gray-100">
-      <!-- TODO: 참가자 목록 -->
+      <!-- 참가자 목록 -->
       <div class="bg-gray-200">
         <ParticipantList />
       </div>
 
-      <!-- TODO: 채팅창 -->
+      <!-- 채팅창 -->
       <div class="bg-gray-200">
         <ChatWindow />
       </div>
