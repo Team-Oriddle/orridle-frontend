@@ -11,6 +11,7 @@ import QuizRoomPage from '../pages/quiz_room/QuizRoomPage.vue';
 import Mypage from '../pages/my_page/Mypage.vue';
 import InfoPage from '../pages/info/InfoPage.vue';
 import NoticePage from '../pages/notice/NoticePage.vue';
+import QuizInfoPage from '../pages/quiz_info/QuizInfoPage.vue';
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     path: '/quiz',
     component: QuizLayout,
     children: [
+      {
+        // 퀴즈 정보 페이지
+        path: 'info',
+        name: 'quizinfo',
+        component: QuizInfoPage,
+      },
       {
         // 퀴즈 대기실
         path: 'room',
