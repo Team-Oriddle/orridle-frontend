@@ -37,6 +37,7 @@ const routes = [
         component: QuizRoomPage,
       },
       {
+        // 퀴즈 게임 진행 페이지
         path: 'game',
         name: 'quizgame',
         component: QuizGamePage,
