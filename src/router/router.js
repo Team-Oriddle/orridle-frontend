@@ -42,6 +42,7 @@ const routes = [
         component: QuizGamePage,
       },
       {
+        // 퀴즈 참가 페이지
         path: 'attend',
         name: 'quizattend',
         component: QuizAttendpage,
