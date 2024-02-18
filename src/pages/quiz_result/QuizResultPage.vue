@@ -30,6 +30,7 @@
 import ResultHeader from './components/ResultHeader.vue';
 import ResultStats from './components/ResultStats.vue';
 import TopStats from './components/TopStats.vue';
+import { mostCorrectQuiz, mostIncorrectQuiz } from './data/mockData.ts';
 
 export default {
   name: 'QuizResultPage',
@@ -40,20 +41,8 @@ export default {
   },
   data() {
     return {
-      mostCorrectQuiz: {
-        title: '가장 많이 맞춘 퀴즈',
-        question: '이것은 가장 많이 맞춘 퀴즈의 예시입니다.',
-        imageUrl: 'https://source.unsplash.com/random/300x300?quiz',
-        accuracy: 95,
-        altText: '가장 많이 맞춘 퀴즈 이미지',
-      },
-      mostIncorrectQuiz: {
-        title: '가장 많이 틀린 퀴즈',
-        question: '이것은 가장 많이 틀린 퀴즈의 예시입니다.',
-        imageUrl: 'https://source.unsplash.com/random/300x300?quiz',
-        accuracy: 25,
-        altText: '가장 많이 틀린 퀴즈 이미지',
-      },
+      mostCorrectQuiz,
+      mostIncorrectQuiz,
     };
   },
 };
