@@ -55,6 +55,7 @@ const routes = [
         component: QuizAttendpage,
       },
       {
+        // 퀴즈 게임 결과 페이지(통계, 순위, 시간 등)
         path: 'result',
         name: 'quizresult',
         component: QuizResultPage,
