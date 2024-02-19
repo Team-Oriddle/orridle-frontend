@@ -2,20 +2,21 @@ import { createWebHistory, createRouter } from 'vue-router';
 import HelloWorld from '../components/HelloWorld.vue';
 import test from '../components/test.vue';
 import Auth from '../pages/Auth/AuthPage.vue'
-import QuizRoomPage from '../pages/quizRoom/QuizRoomPage.vue'
-import QuizGamePage from '../pages/quizGame/QuizGamePage.vue'
-import QuizAttendpage from '../pages/quizAttend/QuizAttendPage.vue'
-import QuizResultPage from '../pages/quizResult/QuizResultPage.vue'
-import QuizCreatePage from '../pages/quizCreate/QuizCreatePage.vue'
-import Mypage from '../pages/myPage/Mypage.vue'
+import QuizRoomPage from '../pages/quiz_room/QuizRoomPage.vue'
+import QuizGamePage from '../pages/quiz_game/QuizGamePage.vue'
+import QuizAttendpage from '../pages/quiz_attend/QuizAttendPage.vue'
+import QuizResultPage from '../pages/quiz_result/QuizResultPage.vue'
+import QuizCreatePage from '../pages/quiz_create/QuizCreatePage.vue'
+import Mypage from '../pages/my_Page/Mypage.vue'
 import InfoPage from '../pages/info/InfoPage.vue'
 import NoticePage from '../pages/notice/NoticePage.vue'
 import Layout from '../components/Layout.vue'
+import MainPage from '../pages/main/MainPage.vue'
 
 const routes = [
   {
     path: '/',
-    component: HelloWorld,
+    component: MainPage,
   },
   {
     path: '/test',
