@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import HelloWorld from '../components/HelloWorld.vue';
 import test from '../components/test.vue';
+import MainPage from '../pages/main/Mainpage.vue';
 import Auth from '../pages/Auth/AuthPage.vue';
 import QuizLayout from '../components/QuizLayout.vue';
 import QuizGamePage from '../pages/quiz_game/QuizGamePage.vue';
