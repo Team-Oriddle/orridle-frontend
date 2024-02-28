@@ -9,7 +9,7 @@
     </div>
     <div class="grid grid-cols-4">
       <QuizPreview
-        v-for="items in questionList"
+        v-for="items in QuiestionList"
         :title="items.title"
         :img="items.imageUrl"
         :description="items.description"
@@ -20,24 +20,13 @@
 
 <script lang="ts">
 import QuizPreview from './QuizPreview.vue';
-
+import QuiestionList from '../data/mockData';
 export default {
   name: 'QuizList',
   components: { QuizPreview },
   data() {
     return {
-      questionList: {
-        1: {
-          title: '다음 중 올바른 보기는?',
-          imageUrl: 'https://source.unsplash.com/random/800x600',
-          description: '설명',
-        },
-        2: {
-          title: '다음 중 올바른 보기는?',
-          imageUrl: 'https://source.unsplash.com/random/800x600',
-          description: '설명',
-        },
-      },
+      QuiestionList,
     };
   },
 };
