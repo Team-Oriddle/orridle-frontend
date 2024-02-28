@@ -1,12 +1,11 @@
 <template>
-  <div class="w-full flex items-center justify-center">
+  <div class="flex items-start justify-center w-full bg-none">
     <router-view></router-view>
-    ss
   </div>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'LoginForm',
+  name: 'QuizLayout',
 };
 </script>
