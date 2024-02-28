@@ -16,7 +16,7 @@ import QuizInfoPage from '../pages/quiz_info/QuizInfoPage.vue';
 const routes = [
   {
     path: '/',
-    component: HelloWorld,
+    component: MainPage,
   },
   {
     path: '/test',
