@@ -37,6 +37,7 @@
           <p>{{ room.description }}</p>
           <button
             class="px-2 py-1 mt-2 text-xs font-bold text-white bg-green-500 rounded hover:bg-green-700"
+            v-bind:on-click="AttendGameRoom(room.id)"
           >
             참가하기
           </button>
@@ -49,6 +50,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import { publicRoomData } from './data/mockData';
+import axios from 'axios'
+
 
 export default defineComponent({
   name: 'QuizAttendPage',
@@ -79,5 +82,16 @@ export default defineComponent({
       filterRooms,
     };
   },
+  methods:{
+    AttendGameRoom(quizRoomId:number){
+      axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}/join`)
+        .then(response => {
+          //페이지 이동 관련 코드 작성
+        })
+        .catch(error => {
+          console.error('에러!',error)
+        })      
+    }
+  }
 });
 </script>
