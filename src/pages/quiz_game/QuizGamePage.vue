@@ -25,6 +25,7 @@
 import QuestionInfo from './components/QuestionInfo.vue';
 import ChatInput from './components/ChatInput.vue';
 import PlayerList from './components/PlayerList.vue';
+import InGameChatSocket from '../../socket/inGameChatSocket'
 
 export default {
   name: 'QuizGamePage',
@@ -47,7 +48,25 @@ export default {
         { avatarUrl: 'avatar1.png', nickname: 'Player1', score: 100 },
         // 추가 플레이어 데이터...
       ],
+      chat:{
+        chatSocket: null,
+        messages: [],
+        newMessage: '',
+      }
     };
   },
+  created(){
+    this.chat.chatSocket = new InGameChatSocket();
+  },
+  methods:{
+    sendMessage(){
+      const msg = {
+        userName: 'User1',
+        content: this.chat.newMessage,
+      };
+      this.chat.chatSocket.sendMessage(msg,1);
+      this.chat.newMessage = '';
+    }
+  }
 };
 </script>

@@ -41,14 +41,37 @@ import StartGameButton from './components/StartGameButton.vue';
 import QuizRoomInfo from './components/QuizRoomInfo.vue';
 import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
+import ChatSocket from '../../socket/chatSocket.ts'
 
 export default {
-  name: 'QuizRoomPage',
+  name: 'QuizRoomPage', //내차 에올라타
   components: {
     StartGameButton,
     QuizRoomInfo,
     ParticipantList,
     ChatWindow,
   },
+  data() {
+    return {
+      chatSocket: null,
+      messages: [],
+      newMessage: '',
+    };
+  },
+  created(){
+    this.chatSocket = new ChatSocket(1);
+  },
+  methods:{
+    sendMessage(){
+      console.log('메시지 전송을 준비하고 있어요')
+      const msg = {
+        userName: 'User1',
+        content: this.newMessage,
+      };
+      this.chatSocket.sendMessage(msg,1);
+      this.newMessage = '';
+      console.log('메시지 전송을 마무리했어요')
+    }
+  }
 };
 </script>
