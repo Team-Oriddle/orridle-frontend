@@ -37,7 +37,7 @@
           <p>{{ room.description }}</p>
           <button
             class="px-2 py-1 mt-2 text-xs font-bold text-white bg-green-500 rounded hover:bg-green-700"
-            v-bind:on-click="AttendGameRoom(room.id)"
+            @click="AttendGameRoom(1)"
           >
             참가하기
           </button>
@@ -83,10 +83,10 @@ export default defineComponent({
     };
   },
   methods:{
-    AttendGameRoom(quizRoomId:number){
+    AttendGameRoom:function(quizRoomId:number){
       axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}/join`)
         .then(response => {
-          //페이지 이동 관련 코드 작성
+          this.$router.push('/quiz/room')
         })
         .catch(error => {
           console.error('에러!',error)
