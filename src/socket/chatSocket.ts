@@ -2,8 +2,14 @@
 import { Router } from 'vue-router';
 import * as Stomp from 'webstomp-client';
 
+interface UserData{
+  nickname:string,
+  position: number,
+  userId:number
+}
+
 interface GameData{
-  ParticipantList:[]
+  ParticipantList:UserData[]
 }
 
 export default class ChatSocket {
@@ -11,24 +17,23 @@ export default class ChatSocket {
   connected: boolean = false;
   quizRoomId: number = -1;
   router: Router;
-  ParticipantList:[] = [];
+  ParticipantList:UserData[] = [];
   constructor(quizRoomId:number, router:Router) {
     this.quizRoomId = quizRoomId
     this.router = router;
-    //ParticipantList의 경우 userId,nickname,position의 데이터를 가지고 있음,
     this.connect();
   }
 
   getGameData(): GameData{
     return{
       ParticipantList: this.ParticipantList
+      //추후에 채팅 데이터도 추가
     }
   }
+  
 
   connect() {
-    //SockJS => http:
-    //WebSocket => ws
-    const serverURL = 'ws://localhost:8080/ws'; // 실제 서버 주소로 변경
+    const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
     console.log(socket)
     
@@ -43,18 +48,14 @@ export default class ChatSocket {
 
     this.connected = true;
 
-      // 서버로부터 메세지를 받는 부분
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
-      console.log(JSON.parse(message.body));
-      this.ParticipantList.push(message.body)
+      const newPlayer = JSON.parse(message.body);
+      this.ParticipantList.push(newPlayer)
       console.log(this.ParticipantList)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
-        // 메세지 처리 로직
-      console.log(JSON.parse(message.body));
-      this.ParticipantList = this.ParticipantList.filter((player) => player.userId !== message.body.userId)
+      this.ParticipantList = this.ParticipantList.filter((player) => player.userId !== JSON.parse(message.body).userId)
       console.log(this.ParticipantList)
-      //동일한 userId를 찾아서 퇴장 시킴
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/start`, message => {
         // 참가자 정보 + 방 정보를 넘겨줘야함
