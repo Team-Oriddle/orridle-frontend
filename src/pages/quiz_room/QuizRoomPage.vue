@@ -12,6 +12,7 @@
     <section class="grid col-span-8 grid-rows-2 gap-4 bg-gray-100">
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
+        <!--ㅎgameData넘겨주기-->>
         <ParticipantList />
       </div>
 
@@ -56,10 +57,12 @@ export default {
       chatSocket: null,
       messages: [],
       newMessage: '',
+      gameData:'',
     };
   },
   created(){
-    this.chatSocket = new ChatSocket(1);
+    this.chatSocket = new ChatSocket(1,this.$router);
+    this.gameData = this.chatSocket.getGameData();
   },
   methods:{
     sendMessage(){
