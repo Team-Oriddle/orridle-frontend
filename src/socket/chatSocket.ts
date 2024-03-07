@@ -1,12 +1,15 @@
 // socket/chatSocket.ts
+import { Router } from 'vue-router';
 import * as Stomp from 'webstomp-client';
 
 export default class ChatSocket {
   stompClient: Stomp.Client|null = null;
   connected: boolean = false;
   quizRoomId: number = -1;
-  constructor(quizRoomId:number) {
+  router: Router;
+  constructor(quizRoomId:number, router:Router) {
     this.quizRoomId = quizRoomId
+    this.router = router;
     this.connect();
   }
 
@@ -42,6 +45,8 @@ export default class ChatSocket {
         // 참가자 정보 + 방 정보를 넘겨줘야함
         // API에 있음
       console.log(JSON.parse(message.body));
+      this.router.push('/quiz/game')
+
     });
   }
   onError(){
