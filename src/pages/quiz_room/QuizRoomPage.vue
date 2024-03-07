@@ -5,6 +5,7 @@
 <!-- 3. 채팅창 -->
 <!-- 4. 게임 시작 버튼 -->
 <!-- TODO: 현재 가로 크기가 줄어들면 레이아웃 위치가 이상해지는 현상 발견 -->
+<!-- TODO: 참가자 수가 늘어날 수록 채팅창 크기도 같이 커짐 -->
 
 <template>
   <main class="container grid w-full h-full grid-cols-12 gap-4 p-4 mx-auto">
@@ -13,7 +14,7 @@
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
         <!--ㅎgameData넘겨주기-->>
-        <ParticipantList />
+        <ParticipantList :participants=gameData />
       </div>
 
       <!-- 채팅창 -->
@@ -44,9 +45,15 @@ import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
 import ChatSocket from '../../socket/chatSocket.ts'
 
+interface Participant {
+  userId: number;
+  nickname: string;
+  position: number;
+}
+
 export default {
   name: 'QuizRoomPage', //내차 에올라타
-  components: {
+  components: { 
     StartGameButton,
     QuizRoomInfo,
     ParticipantList,
@@ -57,12 +64,13 @@ export default {
       chatSocket: null,
       messages: [],
       newMessage: '',
-      gameData:'',
+      gameData: [],
     };
   },
   created(){
     this.chatSocket = new ChatSocket(1,this.$router);
     this.gameData = this.chatSocket.getGameData();
+    console.log(this.gameData)
   },
   methods:{
     sendMessage(){

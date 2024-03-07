@@ -31,7 +31,6 @@ export default class ChatSocket {
     }
   }
   
-
   connect() {
     const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
@@ -40,14 +39,11 @@ export default class ChatSocket {
     this.stompClient = Stomp.over(socket);
     console.log(this.stompClient)
     console.log(`${this.quizRoomId}번 방으로 접속중...`)
-
     this.stompClient.connect({},this.onConnected, this.onError);
   }
   onConnected = () =>{
     console.log("연결 성공")
-
     this.connected = true;
-
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.push(newPlayer)
@@ -61,7 +57,6 @@ export default class ChatSocket {
         // 참가자 정보 + 방 정보를 넘겨줘야함
         // API에 있음
       console.log(JSON.parse(message.body));
-
       this.router.push('/quiz/game')
     });
   }

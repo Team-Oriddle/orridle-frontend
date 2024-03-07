@@ -3,7 +3,7 @@
     <ul class="space-y-2">
       <li
         v-for="participant in participants"
-        :key="participant.id"
+        :key="participant.userId"
         class="p-4 bg-white rounded shadow cursor-pointer hover:bg-gray-50"
         @click="selectParticipant(participant)"
       >
@@ -14,7 +14,7 @@
           >
             {{ participant.initials }}
           </div>
-          <div class="font-medium">{{ participant.name }}</div>
+          <div class="font-medium">{{ participant.nickname }}</div>
         </div>
       </li>
     </ul>
@@ -22,24 +22,44 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType, ref, toRaw } from 'vue';
+
+interface Participant {
+  userId: number;
+  nickname: string;
+  position: number;
+}
 
 export default defineComponent({
   name: 'ParticipantList',
   setup() {
     // Mock 데이터
     const participants = ref([
-      { id: 1, name: 'Alice', initials: 'A' },
-      { id: 2, name: 'Bob', initials: 'B' },
-      { id: 3, name: 'Bob', initials: 'C' },
-      { id: 4, name: 'Bob', initials: 'D' },
-      { id: 5, name: 'Bob', initials: 'E' },
+      { userId: 1, nickname: 'Alice', initials: 'A' },
+      { userId: 2, nickname: 'Bob', initials: 'B' },
+      { userId: 3, nickname: 'Bob', initials: 'C' },
+      { userId: 4, nickname: 'Bob', initials: 'D' },
+      { userId: 5, nickname: 'Bob', initials: 'E' },
       // ...더 많은 참가자 데이터
     ]);
 
     const selectParticipant = (participant: any) => {
       // 아바타 색상 변경 모달을 열기 위한 로직
       alert(`Select participant: ${participant.name}`);
+  
+  // props: {
+  //   participants: {
+  //     type: Array as PropType<Participant[]>, // Participant 배열 타입으로 지정
+  //     required: true,
+  //   },
+  // },
+  // setup(props) {
+  //   console.log(props)
+  //   const participants = JSON.stringify(props.participants)
+  //   console.log(participants)
+  //   const selectParticipant = (participant: Participant) => {
+  //     console.log(toRaw(props.participants));
+  //     alert(`Select participant: ${participant.userId}`);
     };
 
     return {
