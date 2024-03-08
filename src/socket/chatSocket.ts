@@ -1,4 +1,5 @@
 // socket/chatSocket.ts
+import { toRaw } from 'vue';
 import { Router } from 'vue-router';
 import * as Stomp from 'webstomp-client';
 
@@ -18,14 +19,14 @@ export default class ChatSocket {
   quizRoomId: number = -1;
   router: Router;
   ParticipantList:UserData[] = [];
-  constructor(quizRoomId:number, router:Router, participants) {
-    this.ParticipantList = participants
-    console.log(this.ParticipantList[0])
+  constructor(quizRoomId:number, router:Router, participants:UserData[]) {
+    console.log(participants)
+    this.ParticipantList = toRaw(participants)
+    console.log(this.ParticipantList)
     this.quizRoomId = quizRoomId
     this.router = router;
     this.connect();
   }
-
   getGameData(): GameData{
     return{
       ParticipantList: this.ParticipantList

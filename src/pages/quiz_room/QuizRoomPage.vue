@@ -14,7 +14,7 @@
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
         <!--gameData넘겨주기-->>
-        <ParticipantList />
+        <ParticipantList :participants=UserData />
       </div>
 
       <!-- 채팅창 -->
@@ -72,8 +72,11 @@ export default {
   },
   async created(){//퀴즈 정보 바로 불러오기
     await this.getQuizData(1);
-    this.chatSocket = new ChatSocket(1,this.$router,this.quizData.participants);
-    this.UserData = this.chatSocket.getGameData();
+    console.log(this.quizData.participants);
+    this.UserData = toRaw(this.quizData.participants)
+    this.chatSocket = new ChatSocket(1,this.$router,this.UserData);
+    this.UserData = toRaw(this.chatSocket.getGameData()).ParticipantList
+    console.log(this.UserData.ParticipantList)
   },
   methods:{
     sendMessage(){
@@ -96,7 +99,7 @@ export default {
         })
         console.log(response)
         this.quizData = response.data.data
-        console.log(this.$data.quizData.participants)
+        console.log(toRaw(this.$data.quizData));
       } catch (error) {
         console.error(error)
       }
