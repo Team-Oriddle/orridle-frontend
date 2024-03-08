@@ -13,8 +13,8 @@
     <section class="grid col-span-8 grid-rows-2 gap-4 bg-gray-100">
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
-        <!--ㅎgameData넘겨주기-->>
-        <ParticipantList :participants=gameData />
+        <!--gameData넘겨주기-->>
+        <ParticipantList />
       </div>
 
       <!-- 채팅창 -->
@@ -44,6 +44,8 @@ import QuizRoomInfo from './components/QuizRoomInfo.vue';
 import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
 import ChatSocket from '../../socket/chatSocket.ts'
+import axios from 'axios';
+import { toRaw } from 'vue';
 
 interface Participant {
   userId: number;
@@ -64,13 +66,14 @@ export default {
       chatSocket: null,
       messages: [],
       newMessage: '',
-      gameData: [],
+      UserData: [],
+      quizData:[]
     };
   },
-  created(){
-    this.chatSocket = new ChatSocket(1,this.$router);
-    this.gameData = this.chatSocket.getGameData();
-    console.log(this.gameData)
+  async created(){//퀴즈 정보 바로 불러오기
+    await this.getQuizData(1);
+    this.chatSocket = new ChatSocket(1,this.$router,this.quizData.participants);
+    this.UserData = this.chatSocket.getGameData();
   },
   methods:{
     sendMessage(){
@@ -82,6 +85,21 @@ export default {
       this.chatSocket.sendMessage(msg,1);
       this.newMessage = '';
       console.log('메시지 전송을 마무리했어요')
+    },
+    async getQuizData(quizRoomId:number){
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}`,{
+          withCredentials: true,
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
+        this.quizData = response.data.data
+        console.log(this.$data.quizData.participants)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 };

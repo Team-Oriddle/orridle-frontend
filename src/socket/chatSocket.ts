@@ -18,7 +18,9 @@ export default class ChatSocket {
   quizRoomId: number = -1;
   router: Router;
   ParticipantList:UserData[] = [];
-  constructor(quizRoomId:number, router:Router) {
+  constructor(quizRoomId:number, router:Router, participants) {
+    this.ParticipantList = participants
+    console.log(this.ParticipantList[0])
     this.quizRoomId = quizRoomId
     this.router = router;
     this.connect();
@@ -63,7 +65,6 @@ export default class ChatSocket {
   onError(){
     console.log('error')
   }
-
   sendMessage(msg,quizRoomId:number) {
     if (this.stompClient && this.stompClient.connected) {
       const message = JSON.stringify(msg);
