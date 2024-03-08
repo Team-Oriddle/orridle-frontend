@@ -12,17 +12,18 @@
           <div
             class="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full"
           >
-            {{ participant.initials }}
+            {{ participant.position }}
           </div>
           <div class="font-medium">{{ participant.nickname }}</div>
         </div>
       </li>
     </ul>
+    <div> {{ participants }} </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRaw } from 'vue';
+import { defineComponent, PropType, toRefs } from 'vue';
 
 interface Participant {
   userId: number;
@@ -32,36 +33,23 @@ interface Participant {
 
 export default defineComponent({
   name: 'ParticipantList',
-  setup() {
-    // Mock 데이터
-    const participants = ref([
-      { userId: 1, nickname: 'Alice', initials: 'A' },
-      { userId: 2, nickname: 'Bob', initials: 'B' },
-      { userId: 3, nickname: 'Bob', initials: 'C' },
-      { userId: 4, nickname: 'Bob', initials: 'D' },
-      { userId: 5, nickname: 'Bob', initials: 'E' },
-      // ...더 많은 참가자 데이터
-    ]);
-
-    const selectParticipant = (participant: any) => {
-      // 아바타 색상 변경 모달을 열기 위한 로직
-      alert(`Select participant: ${participant.name}`);
-  
-  // props: {
-  //   participants: {
-  //     type: Array as PropType<Participant[]>, // Participant 배열 타입으로 지정
-  //     required: true,
-  //   },
-  // },
-  // setup(props) {
-  //   console.log(props)
-  //   const participants = JSON.stringify(props.participants)
-  //   console.log(participants)
-  //   const selectParticipant = (participant: Participant) => {
-  //     console.log(toRaw(props.participants));
-  //     alert(`Select participant: ${participant.userId}`);
+  data(){
+    return{
+      Participants:[]
+    }
+  },
+  props: {
+    participants: {
+      type: Array as PropType<Participant[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    console.log(props)
+    const { participants } = toRefs(props);
+    const selectParticipant = (participant: Participant) => {
+      alert(`Select participant: ${participant.userId}`);
     };
-
     return {
       participants,
       selectParticipant,
