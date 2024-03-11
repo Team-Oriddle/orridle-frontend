@@ -1,5 +1,5 @@
 // socket/chatSocket.ts
-import { toRaw } from 'vue';
+import { ref } from 'vue';
 import { Router } from 'vue-router';
 import * as Stomp from 'webstomp-client';
 
@@ -18,22 +18,16 @@ export default class ChatSocket {
   connected: boolean = false;
   quizRoomId: number = -1;
   router: Router;
-  ParticipantList:UserData[] = [];
+  ParticipantList = ref<UserData[]>([]);
   constructor(quizRoomId:number, router:Router, participants:UserData[]) {
     console.log(participants)
-    this.ParticipantList = toRaw(participants)
-    console.log(this.ParticipantList)
+    this.ParticipantList.value = participants
+    console.log(this.ParticipantList.value)
     this.quizRoomId = quizRoomId
     this.router = router;
     this.connect();
   }
-  getGameData(): GameData{
-    return{
-      ParticipantList: this.ParticipantList
-      //추후에 채팅 데이터도 추가
-    }
-  }
-  
+
   connect() {
     const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
@@ -48,13 +42,19 @@ export default class ChatSocket {
     console.log("연결 성공")
     this.connected = true;
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
+      console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
-      this.ParticipantList.push(newPlayer)
-      console.log(this.ParticipantList)
+      this.ParticipantList.value.push(newPlayer)
+      console.log(this.ParticipantList.value)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
-      this.ParticipantList = this.ParticipantList.filter((player) => player.userId !== JSON.parse(message.body).userId)
-      console.log(this.ParticipantList)
+      const userId = JSON.parse(message.body).userId;
+      console.log(userId)
+      const index = this.ParticipantList.value.findIndex(player => player.userId === userId);
+      if (index !== -1) {
+        this.ParticipantList.value.splice(index, 1);
+      }
+      console.log(this.ParticipantList.value);
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/start`, message => {
         // 참가자 정보 + 방 정보를 넘겨줘야함

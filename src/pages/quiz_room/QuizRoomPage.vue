@@ -14,9 +14,9 @@
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
         <!--gameData넘겨주기-->>
-        <ParticipantList :participants=UserData />
+        <ParticipantList :participants="UserData" />
       </div>
-
+      <div>{{ UserData }}</div>
       <!-- 채팅창 -->
       <div class="bg-gray-200">
         <ChatWindow />
@@ -45,7 +45,8 @@ import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
 import ChatSocket from '../../socket/chatSocket.ts'
 import axios from 'axios';
-import { toRaw } from 'vue';
+import { onMounted, ref, toRaw, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 interface Participant {
   userId: number;
@@ -61,22 +62,37 @@ export default {
     ParticipantList,
     ChatWindow,
   },
-  data() {
-    return {
-      chatSocket: null,
-      messages: [],
-      newMessage: '',
-      UserData: [],
-      quizData:[]
-    };
-  },
-  async created(){//퀴즈 정보 바로 불러오기
-    await this.getQuizData(1);
-    console.log(this.quizData.participants);
-    this.UserData = toRaw(this.quizData.participants)
-    this.chatSocket = new ChatSocket(1,this.$router,this.UserData);
-    this.UserData = toRaw(this.chatSocket.getGameData()).ParticipantList
-    console.log(this.UserData.ParticipantList)
+  setup(){
+    const router = useRouter()
+    const UserData = ref([])
+    const chatSocket = ref(null)
+    async function getQuizData(quizRoomId:number){
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}`,{
+          withCredentials: true,
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
+        UserData.value = response.data.data.participants
+        console.log(UserData.value)
+        chatSocket.value = new ChatSocket(1,router,UserData.value)
+        console.log(ChatSocket)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    onMounted( async () =>{
+      getQuizData(1)
+    },
+    )
+    return{
+      UserData,
+      chatSocket,
+    }
+
   },
   methods:{
     sendMessage(){
@@ -89,21 +105,8 @@ export default {
       this.newMessage = '';
       console.log('메시지 전송을 마무리했어요')
     },
-    async getQuizData(quizRoomId:number){
-      try {
-        const response = await axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}`,{
-          withCredentials: true,
-          headers:{
-            'Content-Type': 'application/json'
-          }
-        })
-        console.log(response)
-        this.quizData = response.data.data
-        console.log(toRaw(this.$data.quizData));
-      } catch (error) {
-        console.error(error)
-      }
-    }
+    
+
   }
 };
 </script>
