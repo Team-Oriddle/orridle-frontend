@@ -18,7 +18,6 @@
         </div>
       </li>
     </ul>
-    <div> {{ participants }} </div>
   </div>
 </template>
 
