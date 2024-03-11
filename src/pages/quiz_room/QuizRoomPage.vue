@@ -16,7 +16,6 @@
         <!--gameData넘겨주기-->>
         <ParticipantList :participants="UserData" />
       </div>
-      <div>{{ UserData }}</div>
       <!-- 채팅창 -->
       <div class="bg-gray-200">
         <ChatWindow />
@@ -27,7 +26,7 @@
     <section class="grid col-span-4 gap-4 bg-gray-100 grid-rows-8">
       <!-- 퀴즈 방 정보 & 설정 -->
       <div class="row-span-7">
-        <QuizRoomInfo />
+        <QuizRoomInfo/>
       </div>
 
       <!-- 게임 시작 버튼 -->
@@ -45,7 +44,7 @@ import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
 import ChatSocket from '../../socket/chatSocket.ts'
 import axios from 'axios';
-import { onMounted, ref, toRaw, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface Participant {
@@ -65,6 +64,7 @@ export default {
   setup(){
     const router = useRouter()
     const UserData = ref([])
+    const QuizData = ref([])
     const chatSocket = ref(null)
     async function getQuizData(quizRoomId:number){
       try {
@@ -76,9 +76,9 @@ export default {
         })
         console.log(response)
         UserData.value = response.data.data.participants
-        console.log(UserData.value)
+        QuizData.value = response.data.data
+        console.log(QuizData.value)
         chatSocket.value = new ChatSocket(1,router,UserData.value)
-        console.log(ChatSocket)
       } catch (error) {
         console.error(error)
       }
@@ -91,6 +91,7 @@ export default {
     return{
       UserData,
       chatSocket,
+      QuizData,
     }
 
   },
