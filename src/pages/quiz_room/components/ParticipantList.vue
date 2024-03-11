@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 
 interface Participant {
   userId: number;
@@ -33,11 +33,6 @@ interface Participant {
 
 export default defineComponent({
   name: 'ParticipantList',
-  data(){
-    return{
-      Participants:[]
-    }
-  },
   props: {
     participants: {
       type: Array as PropType<Participant[]>,
@@ -45,14 +40,11 @@ export default defineComponent({
     },
   },
   setup(props) {
-    console.log(props)
-    const { participants } = toRefs(props);
     const selectParticipant = (participant: Participant) => {
       alert(`Select participant: ${participant.userId}`);
     };
     return {
-      participants,
-      selectParticipant,
+      selectParticipant
     };
   },
 });
