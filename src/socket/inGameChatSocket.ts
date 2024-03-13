@@ -34,9 +34,9 @@ export default class InGameSocket {
   connected: boolean = false;
   quizRoomId: number = -1;
   router: Router;
-  QuestionData = ref<Question|null>(null);
   answer: Answer|null = null;
   ParticipantList = ref<UserData[]>([]);
+  QuestionData = ref<Question|null>(null);
   constructor(quizRoomId:number, router:Router, participants:UserData[],QuestionData:any) {
     this.ParticipantList.value = participants
     this.QuestionData.value = QuestionData
@@ -64,6 +64,9 @@ export default class InGameSocket {
       console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.value.push(newPlayer)
+      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
+        return a.position - b.position
+      })
       console.log(this.ParticipantList.value)
       console.log(this)
     });
@@ -74,6 +77,9 @@ export default class InGameSocket {
       if (index !== -1) {
         this.ParticipantList.value.splice(index, 1);
       }
+      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
+        return a.position - b.position
+      })
       console.log(this.ParticipantList.value);
     });
 

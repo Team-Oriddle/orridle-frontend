@@ -41,7 +41,11 @@ export default class ChatSocket {
       console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.value.push(newPlayer)
+      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
+        return a.position - b.position
+      })
       console.log(this.ParticipantList.value)
+      
       console.log(this)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
@@ -51,6 +55,9 @@ export default class ChatSocket {
       if (index !== -1) {
         this.ParticipantList.value.splice(index, 1);
       }
+      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
+        return a.position - b.position
+      })
       console.log(this.ParticipantList.value);
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/start`, message => {
