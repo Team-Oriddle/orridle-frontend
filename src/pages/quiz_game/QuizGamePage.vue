@@ -12,7 +12,7 @@
       <!-- 위에서부터 채팅 말풍선, 캐릭터(아바타)영역, 닉네임, 점수, 채팅 입력 바 -->
       <div class="justify-between">
         <!-- 플레이어 목록 컴포넌트: 아바타, 닉네임, 점수 -->
-        <PlayerList/>
+        <PlayerList :user="UserData"/>
         <!-- 채팅 입력하는 부분 -->
         <ChatInput :socket="GameSocket" />
         <div>
@@ -44,23 +44,23 @@ export default {
     const UserData = ref([])
     const QuestionData = ref({
       "number": 2,
-      "description": "이 노래의 제목은 무엇일까요?",
-      "type": "SHORT_ANSWER",
+      "description": "퀴즈가 준비중입니당",
+      "type": "미정",
       "sourceType": "IMAGE",
-      "source": "https://test-oriddle-bucket.s3.ap-northeast-2.amazonaws.com/karina.jpeg",
-      "score": 10,
+      "source": null,
+      "score": "미정",
       "timeLimit": 30
     })
     const GameSocket = ref({
       Participantlist:null,
       QuestionData:{
-        "number": 2,
-        "description": "이 노래의 제목은 무엇일까요?",
-        "type": "SHORT_ANSWER",
-        "sourceType": "IMAGE",
-        "source": "https://test-oriddle-bucket.s3.ap-northeast-2.amazonaws.com/karina.jpeg",
-        "score": 10,
-        "timeLimit": 30
+        "number": null,
+        "description": null,
+        "type": null,
+        "sourceType": null,
+        "source": null,
+        "score": null,
+        "timeLimit": null
       },
       answer:null,
       connected:null,
@@ -85,11 +85,6 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }
-
-    const shot = (msg) =>{
-      console.log(msg)
-      alert('ehll0')
     }
 
     onMounted(async () => {
