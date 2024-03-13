@@ -9,10 +9,6 @@ interface UserData{
   userId:number
 }
 
-interface GameData{
-  ParticipantList:UserData[]
-}
-
 export default class ChatSocket {
   stompClient: Stomp.Client|null = null;
   connected: boolean = false;
@@ -46,6 +42,7 @@ export default class ChatSocket {
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.value.push(newPlayer)
       console.log(this.ParticipantList.value)
+      console.log(this)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
       const userId = JSON.parse(message.body).userId;
