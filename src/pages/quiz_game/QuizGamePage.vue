@@ -14,7 +14,7 @@
         <!-- 플레이어 목록 컴포넌트: 아바타, 닉네임, 점수 -->
         <PlayerList/>
         <!-- 채팅 입력하는 부분 -->
-        <ChatInput />
+        <ChatInput :socket="GameSocket" />
         <div>
           {{ GameSocket.QuestionData}}
         </div>
@@ -67,7 +67,7 @@ export default {
       onConnected:null,
       quizRoomId:null,
       router:null,
-      stompClient:null
+      stompClient:null,
     })
     
     async function getUserData(quizRoomId:number) {
@@ -86,6 +86,12 @@ export default {
         console.error(error)
       }
     }
+
+    const shot = (msg) =>{
+      console.log(msg)
+      alert('ehll0')
+    }
+
     onMounted(async () => {
       getUserData(1)
     })
@@ -94,16 +100,6 @@ export default {
       UserData,
       QuestionData,
       GameSocket,
-    }
-  },
-  methods:{
-    sendMessage(){
-      const msg = {
-        userName: 'User1',
-        content: this.chat.newMessage,
-      };
-      this.chat.chatSocket.sendMessage(msg,1);
-      this.chat.newMessage = '';
     }
   }
 };
