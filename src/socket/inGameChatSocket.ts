@@ -1,4 +1,5 @@
 // socket/chatSocket.ts
+import { ref } from 'vue';
 import { Router } from 'vue-router';
 import * as Stomp from 'webstomp-client';
 
@@ -8,18 +9,15 @@ interface UserData{
   userId:number
 }
 
+
 interface Question{
+  number: number, // 문제의 번호(몇 번째 번호인지)
   description: string,
 	type: string,
-	number: number, // 문제의 번호(몇 번째 번호인지)
 	sourceType: string,
 	source: string,
 	score: number,
 	timeLimit: number
-}
-
-interface GameData{
-  ParticipantList:UserData[]
 }
 
 interface Answer{
@@ -30,39 +28,25 @@ interface Answer{
 	waitTime: number 
 }
 
+
 export default class InGameSocket {
   stompClient: Stomp.Client|null = null;
   connected: boolean = false;
   quizRoomId: number = -1;
   router: Router;
-  ParticipantList:UserData[] = [];
-  Question:Question|null = null;
-  answer:Answer|null = null;
-  constructor(quizRoomId:number, router:Router) {
+  QuestionData = ref<Question|null>(null);
+  answer: Answer|null = null;
+  ParticipantList = ref<UserData[]>([]);
+  constructor(quizRoomId:number, router:Router, participants:UserData[],QuestionData:any) {
+    this.ParticipantList.value = participants
+    this.QuestionData.value = QuestionData
+    console.log(this.ParticipantList.value)
+    console.log(this.QuestionData.value)
     this.quizRoomId = quizRoomId
     this.router = router;
     this.connect();
   }
 
-  getAnswer(){
-    return{
-      Answer: this.answer
-    }
-  }
-
-  getQuestionData(){
-    return{
-      Question: this.Question
-    }
-  }
-
-  getGameData(): GameData{
-    return{
-      ParticipantList: this.ParticipantList
-      //추후에 채팅 데이터도 추가
-    }
-  }
-  
   connect() {
     const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
@@ -77,19 +61,27 @@ export default class InGameSocket {
     console.log("연결 성공")
     this.connected = true;
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
+      console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
-      this.ParticipantList.push(newPlayer)
-      console.log(this.ParticipantList)
+      this.ParticipantList.value.push(newPlayer)
+      console.log(this.ParticipantList.value)
+      console.log(this)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
-      this.ParticipantList = this.ParticipantList.filter((player) => player.userId !== JSON.parse(message.body).userId)
-      console.log(this.ParticipantList)
+      const userId = JSON.parse(message.body).userId;
+      console.log(userId)
+      const index = this.ParticipantList.value.findIndex(player => player.userId === userId);
+      if (index !== -1) {
+        this.ParticipantList.value.splice(index, 1);
+      }
+      console.log(this.ParticipantList.value);
     });
-    //////////////////////////////////////////////
+
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/question`, message => {
       console.log(JSON.parse(message.body))
-      const newQuestion = JSON.parse(message.body)
-      this.Question = newQuestion
+      this.QuestionData.value = JSON.parse(message.body)
+      console.log(this.QuestionData.value)
+      console.log(this)
 
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/answer`, message => {
@@ -114,7 +106,6 @@ export default class InGameSocket {
   onError(){
     console.log('error')
   }
-
   sendMessage(msg,quizRoomId:number) {
     if (this.stompClient && this.stompClient.connected) {
       const message = JSON.stringify(msg);

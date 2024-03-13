@@ -5,17 +5,19 @@
   <main class="container h-[90vh] mt-8 flex flex-col justify-evenly">
     <!-- 진행중인 퀴즈 문제에 대한 정보 제공 섹션, 중앙 10개 그리드 사용 -->
     <section>
-      <QuestionInfo :question="currentQuestion" />
+      <QuestionInfo :question="GameSocket.QuestionData" />
     </section>
     <!-- 각각의 캐릭터들 아바타와 아래에 닉네임, 그 아래에 점수가 적혀있는 부분과(퍼블리싱 때는 카드로) 그 위에 채팅 말풍선이 나타날 영역(퍼블리싱 때는 말풍선 영역 보이도록 하기) -->
     <section>
       <!-- 위에서부터 채팅 말풍선, 캐릭터(아바타)영역, 닉네임, 점수, 채팅 입력 바 -->
       <div class="justify-between">
         <!-- 플레이어 목록 컴포넌트: 아바타, 닉네임, 점수 -->
-        <PlayerList :players="players" />
-
+        <PlayerList/>
         <!-- 채팅 입력하는 부분 -->
         <ChatInput />
+        <div>
+          {{ GameSocket.QuestionData}}
+        </div>
       </div>
     </section>
   </main>
@@ -26,6 +28,9 @@ import QuestionInfo from './components/QuestionInfo.vue';
 import ChatInput from './components/ChatInput.vue';
 import PlayerList from './components/PlayerList.vue';
 import InGameChatSocket from '../../socket/inGameChatSocket'
+import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
 
 export default {
   name: 'QuizGamePage',
@@ -34,29 +39,62 @@ export default {
     ChatInput,
     PlayerList,
   },
-  data() {
-    return {
-      currentQuestion: {
-        title: '다음 중 올바른 보기는?',
-        type: '객관식',
-        score: 10,
-        imageUrl: 'https://source.unsplash.com/random/800x600',
-        choices: ['선택지 1', '선택지 2', '선택지 3', '선택지 4'],
+  setup(){
+    const router = useRouter()
+    const UserData = ref([])
+    const QuestionData = ref({
+      "number": 2,
+      "description": "이 노래의 제목은 무엇일까요?",
+      "type": "SHORT_ANSWER",
+      "sourceType": "IMAGE",
+      "source": "https://test-oriddle-bucket.s3.ap-northeast-2.amazonaws.com/karina.jpeg",
+      "score": 10,
+      "timeLimit": 30
+    })
+    const GameSocket = ref({
+      Participantlist:null,
+      QuestionData:{
+        "number": 2,
+        "description": "이 노래의 제목은 무엇일까요?",
+        "type": "SHORT_ANSWER",
+        "sourceType": "IMAGE",
+        "source": "https://test-oriddle-bucket.s3.ap-northeast-2.amazonaws.com/karina.jpeg",
+        "score": 10,
+        "timeLimit": 30
       },
-      players: [
-        // 플레이어 데이터 예시
-        { avatarUrl: 'avatar1.png', nickname: 'Player1', score: 100 },
-        // 추가 플레이어 데이터...
-      ],
-      chat:{
-        chatSocket: null,
-        messages: [],
-        newMessage: '',
+      answer:null,
+      connected:null,
+      onConnected:null,
+      quizRoomId:null,
+      router:null,
+      stompClient:null
+    })
+    
+    async function getUserData(quizRoomId:number) {
+      try {
+        const response = await axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}`,{
+          withCredentials: true,
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
+        UserData.value = response.data.data.participants
+        GameSocket.value = new InGameChatSocket(1,router,UserData.value,QuestionData.value)
+        QuestionData.value = GameSocket.value.QuestionData 
+      } catch (error) {
+        console.error(error)
       }
-    };
-  },
-  created(){
-    this.chat.chatSocket = new InGameChatSocket();
+    }
+    onMounted(async () => {
+      getUserData(1)
+    })
+
+    return{
+      UserData,
+      QuestionData,
+      GameSocket,
+    }
   },
   methods:{
     sendMessage(){
