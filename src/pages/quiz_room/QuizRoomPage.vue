@@ -31,7 +31,7 @@
 
       <!-- 게임 시작 버튼 -->
       <div class="">
-        <StartGameButton />
+        <StartGameButton :roomId="1"/>
       </div>
     </section>
   </main>
@@ -56,7 +56,7 @@ interface Participant {
 
 
 export default {
-  name: 'QuizRoomPage', //내차 에올라타
+  name: 'QuizRoomPage',
   components: { 
     StartGameButton,
     QuizRoomInfo,
@@ -65,13 +65,12 @@ export default {
   },
   setup(){
     const router = useRouter()
+    const quizRoomId = router.currentRoute.value.params.id
     const UserData = ref<Participant[]>([])
-    const alignedUserData = computed(()=>UserData.value.sort(function(a,b){
-      return a.position-b.position
-    }))
     function UpdateUserData(props){//UserData를 업데이트 하는 함수
       UserData.value = props
     }
+
     const QuizData = ref([])
     function UpdateQuizData(props){
       QuizData.value = props
@@ -79,7 +78,9 @@ export default {
 
     const chatSocket = ref(null)
 
-
+    const alignedUserData = computed(()=>UserData.value.sort(function(a,b){
+      return a.position-b.position
+    }))
 
     async function getQuizData(quizRoomId:number){
       try {
@@ -92,34 +93,21 @@ export default {
         UpdateUserData(response.data.data.participants)
         UpdateQuizData(response.data.data)
         console.log(QuizData.value)
-        chatSocket.value = new ChatSocket(1,router,UserData.value)
+        chatSocket.value = new ChatSocket(quizRoomId,router,UserData.value)//UserData의 value를 넘겨줌
       } catch (error) {
         console.error(error)
       }
     }
-    onMounted( async () =>{
-      getQuizData(1)
-    },
-    )
+
+    onMounted( async() =>{
+      getQuizData(quizRoomId)
+    })
+
     return{
       UserData,
       chatSocket,
-      QuizData,
       alignedUserData
     }
-  },
-  methods:{
-    sendMessage(){
-      console.log('메시지 전송을 준비하고 있어요')
-      const msg = {
-        userName: 'User1',
-        content: this.newMessage,
-      };
-      this.chatSocket.sendMessage(msg,1);
-      this.newMessage = '';
-      console.log('메시지 전송을 마무리했어요')
-    },
-    
   }
 };
 </script>
