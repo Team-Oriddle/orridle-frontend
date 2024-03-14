@@ -16,7 +16,6 @@ export default class ChatSocket {
   router: Router;
   ParticipantList = ref<UserData[]>([]);
   constructor(quizRoomId:number, router:Router, participants:UserData[]) {
-    console.log(participants)
     this.ParticipantList.value = participants
     console.log(this.ParticipantList.value)
     this.quizRoomId = quizRoomId
@@ -27,10 +26,8 @@ export default class ChatSocket {
   connect() {
     const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
-    console.log(socket)
     
     this.stompClient = Stomp.over(socket);
-    console.log(this.stompClient)
     console.log(`${this.quizRoomId}번 방으로 접속중...`)
     this.stompClient.connect({},this.onConnected, this.onError);
   }
@@ -38,15 +35,9 @@ export default class ChatSocket {
     console.log("연결 성공")
     this.connected = true;
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
-      console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.value.push(newPlayer)
-      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
-        return a.position - b.position
-      })
       console.log(this.ParticipantList.value)
-      
-      console.log(this)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
       const userId = JSON.parse(message.body).userId;
@@ -55,9 +46,6 @@ export default class ChatSocket {
       if (index !== -1) {
         this.ParticipantList.value.splice(index, 1);
       }
-      this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
-        return a.position - b.position
-      })
       console.log(this.ParticipantList.value);
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/start`, message => {
