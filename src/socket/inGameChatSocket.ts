@@ -58,7 +58,8 @@ export default class InGameSocket {
     this.stompClient.connect({},this.onConnected, this.onError);
   }
   onConnected = () =>{
-    console.log("연결 성공")
+    const realTime = new Date().getSeconds
+    console.log(`${realTime}접속`)
     this.connected = true;
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
       console.log(this.ParticipantList.value)
@@ -84,6 +85,8 @@ export default class InGameSocket {
     });
 
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/question`, message => {
+      const realTime = new Date().getSeconds
+      console.log(`${realTime} 퀴즈 시작`)
       console.log(JSON.parse(message.body))
       this.QuestionData.value = JSON.parse(message.body)
       console.log(this.QuestionData.value)
@@ -95,7 +98,7 @@ export default class InGameSocket {
       const newAnswer = JSON.parse(message.body)
       this.answer = newAnswer
     });
-    this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/timeover`, message => {
+    this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/time-out`, message => {
       console.log(JSON.parse(message.body))
       const newAnswer = JSON.parse(message.body)
       this.answer = newAnswer
@@ -115,7 +118,8 @@ export default class InGameSocket {
   sendMessage(msg,quizRoomId:number) {
     if (this.stompClient && this.stompClient.connected) {
       const message = JSON.stringify(msg);
-      this.stompClient.send(`/app/quiz-room/${quizRoomId}`, message, {});
+      this.stompClient.send(`/app/quiz-room/${quizRoomId}/chat`, JSON.stringify({answer:msg}), {});
+      this.stompClient.send(`/app/quiz-room/${quizRoomId}/check-answer`, JSON.stringify({answer:msg}), {});
       //주관식이면 채팅입력시 퀴즈 문제 정답과 퀴즈방 채팅을 동시에 쏴주고
       //그게 아닌경우 채팅으로 퀴즈방 채팅만
     }

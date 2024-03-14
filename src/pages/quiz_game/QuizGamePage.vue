@@ -16,7 +16,6 @@
         <!-- 채팅 입력하는 부분 -->
         <ChatInput :socket="GameSocket" />
         <div>
-          {{ GameSocket.QuestionData}}
         </div>
       </div>
     </section>

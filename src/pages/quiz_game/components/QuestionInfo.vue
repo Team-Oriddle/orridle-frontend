@@ -11,7 +11,7 @@
     <!-- 문제 이미지와 선택지 영역 -->
     <div class="grid grid-cols-10 col-span-10 col-start-2 gap-4">
       <div class="col-span-4">
-        <img :src="question.source" alt="문제 이미지" class="w-full" />
+        <img :src="question.source" alt="문제 이미지" class="w-72" />
       </div>
       <div class="grid grid-cols-2 col-span-6 gap-4">
         <div
