@@ -40,6 +40,7 @@ export default {
   },
   setup(){
     const router = useRouter()
+    const quizRoomId:Number = router.currentRoute.value.params.id
     const UserData = ref([])
     const QuestionData = ref({
       "number": 2,
@@ -79,7 +80,7 @@ export default {
         })
         console.log(response)
         UserData.value = response.data.data.participants
-        GameSocket.value = new InGameChatSocket(1,router,UserData.value,QuestionData.value)
+        GameSocket.value = new InGameChatSocket(3,router,UserData.value,QuestionData.value)
         QuestionData.value = GameSocket.value.QuestionData 
       } catch (error) {
         console.error(error)
@@ -87,7 +88,7 @@ export default {
     }
 
     onMounted(async () => {
-      getUserData(1)
+      getUserData(quizRoomId)
     })
 
     return{
