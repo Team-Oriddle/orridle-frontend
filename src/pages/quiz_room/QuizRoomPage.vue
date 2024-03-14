@@ -14,7 +14,7 @@
       <!-- 참가자 목록 -->
       <div class="bg-gray-200">
         <!--gameData넘겨주기-->>
-        <ParticipantList :participants="UserData" />
+        <ParticipantList :participants="alignedUserData" />
       </div>
       <!-- 채팅창 -->
       <div class="bg-gray-200">
@@ -44,14 +44,16 @@ import ParticipantList from './components/ParticipantList.vue';
 import ChatWindow from './components/ChatWindow.vue';
 import ChatSocket from '../../socket/chatSocket.ts'
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface Participant {
   userId: number;
   nickname: string;
   position: number;
+  isHost: boolean;
 }
+
 
 export default {
   name: 'QuizRoomPage', //내차 에올라타
@@ -63,9 +65,22 @@ export default {
   },
   setup(){
     const router = useRouter()
-    const UserData = ref([])
+    const UserData = ref<Participant[]>([])
+    const alignedUserData = computed(()=>UserData.value.sort(function(a,b){
+      return a.position-b.position
+    }))
+    function UpdateUserData(props){//UserData를 업데이트 하는 함수
+      UserData.value = props
+    }
     const QuizData = ref([])
+    function UpdateQuizData(props){
+      QuizData.value = props
+    }
+
     const chatSocket = ref(null)
+
+
+
     async function getQuizData(quizRoomId:number){
       try {
         const response = await axios.get(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}`,{
@@ -74,16 +89,14 @@ export default {
             'Content-Type': 'application/json'
           }
         })
-        console.log(response)
-        UserData.value = response.data.data.participants
-        QuizData.value = response.data.data
+        UpdateUserData(response.data.data.participants)
+        UpdateQuizData(response.data.data)
         console.log(QuizData.value)
         chatSocket.value = new ChatSocket(1,router,UserData.value)
       } catch (error) {
         console.error(error)
       }
     }
-
     onMounted( async () =>{
       getQuizData(1)
     },
@@ -92,8 +105,8 @@ export default {
       UserData,
       chatSocket,
       QuizData,
+      alignedUserData
     }
-
   },
   methods:{
     sendMessage(){
@@ -107,7 +120,6 @@ export default {
       console.log('메시지 전송을 마무리했어요')
     },
     
-
   }
 };
 </script>
