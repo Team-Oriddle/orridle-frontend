@@ -9,25 +9,53 @@
     </div>
     <div class="grid grid-cols-4">
       <QuizPreview
-        v-for="items in QuiestionList"
-        :title="items.title"
-        :img="items.imageUrl"
-        :description="items.description"
+        v-for="item in quizzes"
+        :key="item.quizId"
+        :title="item.title"
+        :img="item.imageUrl"
+        :description="item.description"
+        :quizId="item.quizId"
       ></QuizPreview>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import QuizPreview from './QuizPreview.vue';
-import QuiestionList from '../data/mockData';
+
+interface Quiz {
+  quizId: number;
+  title: string;
+  imageUrl: string;
+  description: string;
+}
+
 export default {
   name: 'QuizList',
-  components: { QuizPreview },
+  components: {
+    QuizPreview,
+  },
   data() {
     return {
-      QuiestionList,
+      quizzes: [] as Quiz[],
     };
+  },
+  created() {
+    this.fetchQuizzes();
+  },
+  methods: {
+    async fetchQuizzes() {
+      try {
+        const response = await axios.get('http://localhost:8080/api/v1/quiz/page/0');
+        if (response.data && response.data.data && response.data.data.quizzes) {
+          this.quizzes = response.data.data.quizzes as Quiz[];
+        }
+      } catch (error) {
+        console.error('Error fetching quizzes:', error);
+        // 오류 처리 로직
+      }
+    },
   },
 };
 </script>
