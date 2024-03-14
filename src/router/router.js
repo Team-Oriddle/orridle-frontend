@@ -33,9 +33,10 @@ const routes = [
     children: [
       {
         // 퀴즈 정보 페이지
-        path: 'info/:id',
+        path: 'info/:quizId',
         name: 'quizinfo',
         component: QuizInfoPage,
+        props: true
       },
       {
         // 퀴즈 대기실
