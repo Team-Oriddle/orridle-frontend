@@ -24,8 +24,6 @@ export default defineComponent({
   setup() {
     const isLoggedIn = computed(() => store.getters.isLoggedIn);
     const userInfo = computed(() => store.getters.userInfo);
-    console.log('isLoggedIn', isLoggedIn.value);
-    console.log('userInfo', userInfo.value);
 
     return {
       isLoggedIn,

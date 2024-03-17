@@ -60,7 +60,7 @@ export default defineComponent({
     socialLogin(provider: 'google' | 'facebook') {
       const redirectEndPoint = encodeURIComponent('/');
       const baseUrl = `http://localhost:8080/api/v1/login/${provider}?redirectEndPoint=${redirectEndPoint}`;
-      console.log(`소셜 로그인 시도 - ${provider} - ${baseUrl}`);
+      console.log(`소셜 로그인 시도 - ${provider}`);
       window.location.href = baseUrl;
     },
   },
