@@ -58,7 +58,10 @@ export default defineComponent({
   name: 'LoginForm',
   methods: {
     socialLogin(provider: 'google' | 'facebook') {
-      console.log(`소셜 로그인 시도 - ${provider}`);
+      const redirectEndPoint = encodeURIComponent('/');
+      const baseUrl = `http://localhost:8080/api/v1/login/${provider}?redirectEndPoint=${redirectEndPoint}`;
+      console.log(`소셜 로그인 시도 - ${provider} - ${baseUrl}`);
+      window.location.href = baseUrl;
     },
   },
 });
