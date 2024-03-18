@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { DefineComponent, PropType } from 'vue';
+import { PropType } from 'vue';
 
 export default {
   name: 'QuizInfo',

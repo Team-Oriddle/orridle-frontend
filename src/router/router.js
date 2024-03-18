@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import test from '../components/test.vue';
-import MainPage from '../pages/main/Mainpage.vue';
+import MainPage from '../pages/main/MainPage.vue';
 import Auth from '../pages/Auth/AuthPage.vue';
 import QuizLayout from '../components/QuizLayout.vue';
 import QuizGamePage from '../pages/quiz_game/QuizGamePage.vue';
@@ -8,7 +8,7 @@ import QuizAttendpage from '../pages/quiz_attend/QuizAttendPage.vue';
 import QuizResultPage from '../pages/quiz_result/QuizResultPage.vue';
 import QuizCreatePage from '../pages/quiz_create/QuizCreatePage.vue';
 import QuizRoomPage from '../pages/quiz_room/QuizRoomPage.vue';
-import Mypage from '../pages/my_page/Mypage.vue';
+import Mypage from '../pages/my_page/MyPage.vue';
 import InfoPage from '../pages/info/InfoPage.vue';
 import NoticePage from '../pages/notice/NoticePage.vue';
 import QuizInfoPage from '../pages/quiz_info/QuizInfoPage.vue';
