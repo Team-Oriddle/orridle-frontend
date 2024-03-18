@@ -1,9 +1,13 @@
 <template>
-  <div class="flex flex-col content-center h-56 border-2 border-solid m-4">
-    <div class="h-2/3 bg-amber-400">{{ img }}</div>
-    <div class="h-1/3 px-4 py-1">
-      <div class="text-xl">{{ title }}</div>
-      <div class="text-sm">{{ description }}</div>
+  <div @click="navigateToQuizInfo(Number(quizId))" class="cursor-pointer">
+    <div class="flex flex-col content-center h-56 border-2 border-solid m-4">
+      <div class="h-2/3">
+        <img :src="img" alt="Quiz Image" class="w-full h-full object-cover"/>
+      </div>
+      <div class="h-1/3 px-4 py-1">
+        <div class="text-xl">{{ title }}</div>
+        <div class="text-sm">{{ description }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +19,13 @@ export default {
     title: String,
     img: String,
     description: String,
+    quizId: Number,
+    navigateToQuizInfo: Function,
   },
+  methods: {
+    navigateToQuizInfo(quizId: number) {
+      this.$router.push(`/quiz/info/${quizId}`);
+    }
+  }
 };
 </script>

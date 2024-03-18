@@ -33,19 +33,20 @@ const routes = [
     children: [
       {
         // 퀴즈 정보 페이지
-        path: 'info',
+        path: 'info/:quizId',
         name: 'quizinfo',
         component: QuizInfoPage,
+        props: true
       },
       {
         // 퀴즈 대기실
-        path: 'room',
+        path: 'room/:id',
         name: 'quizroom',
         component: QuizRoomPage,
       },
       {
         // 퀴즈 게임 진행 페이지
-        path: 'game',
+        path: 'game/:id',
         name: 'quizgame',
         component: QuizGamePage,
       },
