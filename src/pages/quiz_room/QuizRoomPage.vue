@@ -31,7 +31,7 @@
 
       <!-- 게임 시작 버튼 -->
       <div class="">
-        <StartGameButton :roomId="1"/>
+        <StartGameButton :roomId="quizRoomId"/>
       </div>
     </section>
   </main>
@@ -106,7 +106,8 @@ export default {
     return{
       UserData,
       chatSocket,
-      alignedUserData
+      alignedUserData,
+      quizRoomId,
     }
   }
 };

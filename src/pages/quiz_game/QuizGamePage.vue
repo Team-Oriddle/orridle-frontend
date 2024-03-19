@@ -40,7 +40,7 @@ export default {
   },
   setup(){
     const router = useRouter()
-    const quizRoomId:Number = router.currentRoute.value.params.id
+    const quizRoomId:Number =router.currentRoute.value.params.id
     const UserData = ref([])
     const QuestionData = ref({
       "number": 2,
