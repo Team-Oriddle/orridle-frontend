@@ -66,6 +66,8 @@ export default {
   setup(){
     const router = useRouter()
     const quizRoomId = router.currentRoute.value.params.id
+    console.log('방번호 왜 이렇게 잡힘?')
+    console.log(quizRoomId)
     const UserData = ref<Participant[]>([])
     function UpdateUserData(props){//UserData를 업데이트 하는 함수
       UserData.value = props

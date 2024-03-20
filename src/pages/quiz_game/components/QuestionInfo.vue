@@ -1,8 +1,12 @@
 <template>
   <section class="grid grid-cols-12 gap-4">
     <!-- 제목, 문제 유형, 점수를 띄워주는 영역 -->
+
     <div class="flex justify-between col-span-10 col-start-2">
       <h1 class="text-xl font-bold">{{ question.description }}</h1>
+      <div class="flex flex-col items-center">
+      {{ countdown }}초 남았습니다!
+    </div>
       <div class="flex">
         <p class="text-md">유형: {{ question.type }},</p>
         <p>점수: {{ question.score }}</p>
@@ -27,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 
 export default defineComponent({
   name: 'QuestionInfo',
@@ -44,5 +48,33 @@ export default defineComponent({
       }),
     },
   },
+  
+  setup(props){
+    let countdown = ref(30);
+    let intervalId = null; 
+
+    watch(() => props.question, (newValue, oldValue) => {
+      countdown.value = 30;
+      intervalId = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            clearInterval(intervalId);
+          }
+        }, 1000);
+    });
+
+    onMounted(()=>{
+        intervalId = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            clearInterval(intervalId);
+          }
+        }, 1000);
+    })
+
+    return{
+      countdown
+    }
+  }
 });
 </script>

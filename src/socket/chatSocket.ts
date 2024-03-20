@@ -52,7 +52,7 @@ export default class ChatSocket {
         // 참가자 정보 + 방 정보를 넘겨줘야함
         // API에 있음
       console.log(JSON.parse(message.body));
-      this.router.push('/quiz/game')
+      this.router.push(`/quiz/game/${this.quizRoomId}`)
     });
   }
   onError(){

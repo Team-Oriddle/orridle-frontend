@@ -2,8 +2,9 @@
 <!-- TODO: 2. 고정 높이를 제공하여 이미지가 로딩되면서 레이아웃 변형 없도록 하기 -->
 <template>
   <!-- 전체 12column 그리드, section 별 컴포넌트 분리 예정 -->
-  <main class="container h-[90vh] mt-8 flex flex-col justify-evenly">
+  <main v-if="GameSocket.QuestionData.number!==0" class="container h-[90vh] mt-8 flex flex-col justify-evenly">
     <!-- 진행중인 퀴즈 문제에 대한 정보 제공 섹션, 중앙 10개 그리드 사용 -->
+
     <section>
       <QuestionInfo :question="GameSocket.QuestionData" />
     </section>
@@ -20,6 +21,11 @@
       </div>
     </section>
   </main>
+  <div v-else>
+    <!-- 대기 화면 -->
+    <p>Loading...</p>
+    <p>{{ countdown }}초 뒤에 시작합니다</p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -41,9 +47,10 @@ export default {
   setup(){
     const router = useRouter()
     const quizRoomId:Number =router.currentRoute.value.params.id
+    const isLoading = ref(true)
     const UserData = ref([])
     const QuestionData = ref({
-      "number": 2,
+      "number": 0,
       "description": "퀴즈가 준비중입니당",
       "type": "미정",
       "sourceType": "IMAGE",
@@ -69,6 +76,9 @@ export default {
       router:null,
       stompClient:null,
     })
+
+    let countdown = ref(5);
+    let intervalId = null; 
     
     async function getUserData(quizRoomId:number) {
       try {
@@ -80,14 +90,23 @@ export default {
         })
         console.log(response)
         UserData.value = response.data.data.participants
-        GameSocket.value = new InGameChatSocket(3,router,UserData.value,QuestionData.value)
+        GameSocket.value = new InGameChatSocket(quizRoomId,router,UserData.value,QuestionData.value)
         QuestionData.value = GameSocket.value.QuestionData 
+        isLoading.value = true
+        console.log(isLoading.value)
+        
       } catch (error) {
         console.error(error)
       }
     }
 
     onMounted(async () => {
+      intervalId = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            clearInterval(intervalId);
+          }
+        }, 1000);
       getUserData(quizRoomId)
     })
 
@@ -95,6 +114,8 @@ export default {
       UserData,
       QuestionData,
       GameSocket,
+      isLoading,
+      countdown,
     }
   }
 };
