@@ -55,12 +55,6 @@ export default defineComponent({
 
     watch(() => props.question, (newValue, oldValue) => {
       countdown.value = 30;
-      intervalId = setInterval(() => {
-          countdown.value--;
-          if (countdown.value === 0) {
-            clearInterval(intervalId);
-          }
-        }, 1000);
     });
 
     onMounted(()=>{
