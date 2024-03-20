@@ -46,6 +46,7 @@ import ChatSocket from '../../socket/chatSocket.ts'
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { idText } from 'typescript';
 
 interface Participant {
   userId: number;
@@ -101,8 +102,33 @@ export default {
       }
     }
 
-    onMounted( async() =>{
+    async function joinGame(quizRoomId:number) {
+      try {
+        const response = await axios.post(`http://localhost:8080/api/v1/quiz-room/${quizRoomId}/join`,
+        {},
+        {
+          withCredentials: true,
+          headers:{
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
+      } catch (error) {
+        if(error.message == 'Request failed with status code 400'){
+          console.log('400')
+        }
+        if(error.message == 'Request failed with status code 401'){
+          console.log('401')
+          window.location.href = `http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:5173/quiz/room/${quizRoomId}`
+        }
+        console.log(error)
+      }
       getQuizData(quizRoomId)
+    }
+
+    onMounted( async() =>{
+      joinGame(quizRoomId)
+
     })
 
     return{
