@@ -46,7 +46,6 @@ import ChatSocket from '../../socket/chatSocket.ts'
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { idText } from 'typescript';
 
 interface Participant {
   userId: number;
@@ -114,15 +113,13 @@ export default {
         })
         console.log(response)
       } catch (error) {
-        if(error.message == 'Request failed with status code 400'){
-          console.log('400')
-        }
         if(error.message == 'Request failed with status code 401'){
           console.log('401')
-          window.location.href = `http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:5173/quiz/room/${quizRoomId}`
+          const redirectEndPoint = encodeURIComponent(`/quiz/room/${quizRoomId}`);
+          window.location.href = `http://localhost:8080/api/v1/login/google?redirectEndPoint=${redirectEndPoint}`
         }
         console.log(error)
-      }
+      } 
       getQuizData(quizRoomId)
     }
 
