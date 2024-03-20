@@ -18,6 +18,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import InGameSocket from '../../../socket/inGameChatSocket';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'ChatInput',
@@ -29,12 +30,15 @@ export default defineComponent({
   },
   setup(props) {
     const newMessage = ref('');
+    const router = useRouter()
+
+    const quizRoomId = router.currentRoute.value.params.id
 
     const sendMessage = () => {
       if (newMessage.value.trim()) {
         console.log('메시지 전송:', newMessage.value);
         console.log(props.socket)
-        props.socket.sendMessage(newMessage.value,1)
+        props.socket.sendMessage(newMessage.value,quizRoomId)
         newMessage.value = ''; // 입력 필드 초기화
       }
     };
@@ -42,6 +46,7 @@ export default defineComponent({
     return {
       newMessage,
       sendMessage,
+      quizRoomId
     };
   },
 });
