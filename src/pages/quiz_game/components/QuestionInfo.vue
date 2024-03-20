@@ -60,8 +60,8 @@ export default defineComponent({
     onMounted(()=>{
         intervalId = setInterval(() => {
           countdown.value--;
-          if (countdown.value === 0) {
-            clearInterval(intervalId);
+          if (countdown.value <= 0) {
+            countdown.value = 0
           }
         }, 1000);
     })
