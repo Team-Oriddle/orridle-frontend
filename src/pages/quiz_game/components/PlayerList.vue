@@ -1,7 +1,7 @@
 <template>
   <section class="flex items-end gap-4 mt-8 space-y-4 justify-evenly">
     <div
-      v-for="player in players"
+      v-for="player in user"
       :key="player.id"
       class="flex flex-col items-center"
     >
@@ -14,12 +14,12 @@
       </div>
       <!-- 아바타 -->
       <img
-        :src="player.avatarUrl"
+        :src=" 'https://source.unsplash.com/random/100x100'"
         alt="Avatar"
         class="w-12 h-12 rounded-full"
       />
       <!-- 닉네임과 점수 -->
-      <div class="mt-2 font-semibold text-center">{{ player.name }}</div>
+      <div class="mt-2 font-semibold text-center">{{ player.nickname }}</div>
       <div class="text-sm">{{ player.score }}점</div>
     </div>
   </section>
@@ -30,8 +30,14 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'PlayerList',
-  
-  setup() {
+  props:{
+    user:{
+      type: Array,
+      required:true
+    }
+  }
+  ,
+  setup(props) {
     const players = ref([
       {
         id: 1,
@@ -49,6 +55,10 @@ export default defineComponent({
       },
       // 추가 플레이어 데이터
     ]);
+    console.log('시발')
+
+    console.log(props.user)
+
 
     return {
       players,

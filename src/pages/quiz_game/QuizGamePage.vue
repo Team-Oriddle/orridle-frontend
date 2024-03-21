@@ -108,10 +108,10 @@ export default {
         })
         console.log(response)
         UserData.value = response.data.data.participants
+        console.log(UserData.value)
         GameSocket.value = new InGameChatSocket(quizRoomId,router,UserData.value,QuestionData.value)
         QuestionData.value = GameSocket.value.QuestionData 
         isLoading.value = true
-        console.log(isLoading.value)
         
       } catch (error) {
         console.error(error)

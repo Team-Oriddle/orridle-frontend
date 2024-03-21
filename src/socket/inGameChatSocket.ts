@@ -50,30 +50,22 @@ export default class InGameSocket {
   connect() {
     const serverURL = 'ws://localhost:8080/ws';
     const socket = new WebSocket(serverURL);
-    console.log(socket)
     
     this.stompClient = Stomp.over(socket);
-    console.log(this.stompClient)
-    console.log(`${this.quizRoomId}번 방으로 접속중...`)
     this.stompClient.connect({},this.onConnected, this.onError);
   }
   onConnected = () =>{
     const realTime = new Date().getSeconds
-    console.log(`${realTime}접속`)
     this.connected = true;
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/join`, message => {
-      console.log(this.ParticipantList.value)
       const newPlayer = JSON.parse(message.body);
       this.ParticipantList.value.push(newPlayer)
       this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
         return a.position - b.position
       })
-      console.log(this.ParticipantList.value)
-      console.log(this)
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/leave`, message => {
       const userId = JSON.parse(message.body).userId;
-      console.log(userId)
       const index = this.ParticipantList.value.findIndex(player => player.userId === userId);
       if (index !== -1) {
         this.ParticipantList.value.splice(index, 1);
@@ -81,16 +73,11 @@ export default class InGameSocket {
       this.ParticipantList.value = this.ParticipantList.value.sort(function(a,b){
         return a.position - b.position
       })
-      console.log(this.ParticipantList.value);
     });
 
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/question`, message => {
       const realTime = new Date().getSeconds
-      console.log(`${realTime} 퀴즈 시작`)
-      console.log(JSON.parse(message.body))
       this.QuestionData.value = JSON.parse(message.body)
-      console.log(this.QuestionData.value)
-      console.log(this)
 
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/answer`, message => {
