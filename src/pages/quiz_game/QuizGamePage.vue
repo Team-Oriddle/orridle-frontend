@@ -8,6 +8,8 @@
     <section>
       <QuestionInfo :question="GameSocket.QuestionData" />
     </section>
+    <!-- 모달 컴포넌트 -->
+    <Modal v-if="modalOpen" @close="closeModal"/>
     <!-- 각각의 캐릭터들 아바타와 아래에 닉네임, 그 아래에 점수가 적혀있는 부분과(퍼블리싱 때는 카드로) 그 위에 채팅 말풍선이 나타날 영역(퍼블리싱 때는 말풍선 영역 보이도록 하기) -->
     <section>
       <!-- 위에서부터 채팅 말풍선, 캐릭터(아바타)영역, 닉네임, 점수, 채팅 입력 바 -->
@@ -25,6 +27,8 @@
     <!-- 대기 화면 -->
     <p>Loading...</p>
     <p>{{ countdown }}초 뒤에 시작합니다</p>
+    <p>정답은 {{ GameSocket.answer }}입니다</p>
+
   </div>
 </template>
 
@@ -34,8 +38,10 @@ import ChatInput from './components/ChatInput.vue';
 import PlayerList from './components/PlayerList.vue';
 import InGameChatSocket from '../../socket/inGameChatSocket'
 import { useRouter } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
+import Modal from '../../components/Modal.vue';
+
 
 export default {
   name: 'QuizGamePage',
@@ -43,12 +49,14 @@ export default {
     QuestionInfo,
     ChatInput,
     PlayerList,
+    Modal,
   },
   setup(){
     const router = useRouter()
     const quizRoomId:Number =router.currentRoute.value.params.id
     const isLoading = ref(true)
     const UserData = ref([])
+    const modalOpen = ref(true)
     const QuestionData = ref({
       "number": 0,
       "description": "퀴즈가 준비중입니당",
@@ -79,6 +87,14 @@ export default {
 
     let countdown = ref(5);
     let intervalId = null; 
+
+    function openModal(){
+      modalOpen.value = true;
+    }
+
+    function closeModal(){
+      modalOpen.value = false
+    }
     
     async function getUserData(quizRoomId:number) {
       try {
@@ -99,6 +115,17 @@ export default {
         console.error(error)
       }
     }
+    
+
+    watch(() => GameSocket.value.answer, (newValue, oldValue) => {
+      GameSocket.value.QuestionData.number.value = 0
+      intervalId = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            clearInterval(intervalId);
+          }
+        }, 1000);
+    });
 
     onMounted(async () => {
       intervalId = setInterval(() => {
@@ -116,6 +143,9 @@ export default {
       GameSocket,
       isLoading,
       countdown,
+      openModal,
+      closeModal,
+      modalOpen,
     }
   }
 };
