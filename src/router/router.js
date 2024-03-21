@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import test from '../components/test.vue';
 import MainPage from '../pages/main/Mainpage.vue';
-import Auth from '../pages/Auth/AuthPage.vue';
+import auth from '../pages/Auth/AuthPage.vue';
 import QuizLayout from '../components/QuizLayout.vue';
 import QuizGamePage from '../pages/quiz_game/QuizGamePage.vue';
 import QuizAttendpage from '../pages/quiz_attend/QuizAttendPage.vue';
@@ -24,8 +24,8 @@ const routes = [
   },
   {
     path: '/auth',
-    name: 'Auth',
-    component: Auth,
+    name: 'auth',
+    component: auth,
   },
   {
     path: '/quiz',
