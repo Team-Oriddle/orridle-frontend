@@ -26,7 +26,7 @@
     <section class="grid col-span-4 gap-4 bg-gray-100 grid-rows-8">
       <!-- 퀴즈 방 정보 & 설정 -->
       <div class="row-span-7">
-        <QuizRoomInfo/>
+        <QuizRoomInfo :roomId="quizRoomId"/>
       </div>
 
       <!-- 게임 시작 버튼 -->
