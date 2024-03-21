@@ -27,7 +27,8 @@
     <!-- 대기 화면 -->
     <p>Loading...</p>
     <p>{{ countdown }}초 뒤에 시작합니다</p>
-    <p>정답은 {{ GameSocket.answer }}입니다</p>
+
+    <p v-if="GameSocket.answer !== null">정답은 {{ GameSocket.answer.answer }}입니다</p>
 
   </div>
 </template>
@@ -87,6 +88,7 @@ export default {
 
     let countdown = ref(5);
     let intervalId = null; 
+    let isStart = true
 
     function openModal(){
       modalOpen.value = true;
@@ -118,22 +120,24 @@ export default {
     
 
     watch(() => GameSocket.value.answer, (newValue, oldValue) => {
-      GameSocket.value.QuestionData.number.value = 0
+      GameSocket.value.QuestionData.number = 0;
+      countdown.value = 5
       intervalId = setInterval(() => {
           countdown.value--;
-          if (countdown.value === 0) {
+          if (countdown.value <= 0) {
             clearInterval(intervalId);
           }
         }, 1000);
     });
 
     onMounted(async () => {
-      intervalId = setInterval(() => {
-          countdown.value--;
-          if (countdown.value === 0) {
-            clearInterval(intervalId);
-          }
-        }, 1000);
+      // intervalId = setInterval(() => {
+      //     countdown.value--;
+      //     if (countdown.value <= 0) {
+      //       clearInterval(intervalId);
+      //     }
+      //   }, 1000);
+
       getUserData(quizRoomId)
     })
 

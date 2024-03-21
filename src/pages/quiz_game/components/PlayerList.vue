@@ -30,6 +30,7 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'PlayerList',
+  
   setup() {
     const players = ref([
       {
