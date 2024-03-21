@@ -34,7 +34,7 @@ export default class InGameSocket {
   connected: boolean = false;
   quizRoomId: number = -1;
   router: Router;
-  answer: Answer|null = null;
+  answer = ref('');
   ParticipantList = ref<UserData[]>([]);
   QuestionData = ref<Question|null>(null);
   constructor(quizRoomId:number, router:Router, participants:UserData[],QuestionData:any) {
@@ -96,17 +96,18 @@ export default class InGameSocket {
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/answer`, message => {
       console.log(JSON.parse(message.body))
       const newAnswer = JSON.parse(message.body)
-      this.answer = newAnswer
+      this.answer.value = newAnswer
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/time-out`, message => {
       console.log(JSON.parse(message.body))
       const newAnswer = JSON.parse(message.body)
-      this.answer = newAnswer
-      alert('정답은'+this.answer?.answer+'입니다!')
+      this.answer.value = newAnswer
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/finish`, message => {
       console.log(JSON.parse(message.body))
-      this.router.push(`/quiz/result`)
+      let intervalId = setInterval(()=>{
+        this.router.push(`/quiz/result`)
+      },5000)
       //시간 초과시 정답을 알려주는 구독
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/chat`, message => {
