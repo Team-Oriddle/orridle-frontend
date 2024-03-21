@@ -15,7 +15,7 @@
       <!-- 위에서부터 채팅 말풍선, 캐릭터(아바타)영역, 닉네임, 점수, 채팅 입력 바 -->
       <div class="justify-between">
         <!-- 플레이어 목록 컴포넌트: 아바타, 닉네임, 점수 -->
-        <PlayerList :user="UserData"/>
+        <PlayerList :socket="GameSocket"/>
         <!-- 채팅 입력하는 부분 -->
         <ChatInput :socket="GameSocket" />
         <div>
@@ -110,7 +110,8 @@ export default {
         UserData.value = response.data.data.participants
         console.log(UserData.value)
         GameSocket.value = new InGameChatSocket(quizRoomId,router,UserData.value,QuestionData.value)
-        QuestionData.value = GameSocket.value.QuestionData 
+        console.log(GameSocket.value.Participantlist)
+        QuestionData.value = GameSocket.value.QuestionData;
         isLoading.value = true
         
       } catch (error) {

@@ -24,8 +24,7 @@ export default defineComponent({
   name: 'ChatInput',
   props:{
     socket:{
-      type:InGameSocket,
-      required: true,
+      type:InGameSocket
     }
   },
   setup(props) {

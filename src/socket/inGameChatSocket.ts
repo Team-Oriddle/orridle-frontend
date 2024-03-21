@@ -38,7 +38,7 @@ export default class InGameSocket {
   ParticipantList = ref<UserData[]>([]);
   QuestionData = ref<Question|null>(null);
   constructor(quizRoomId:number, router:Router, participants:UserData[],QuestionData:any) {
-    this.ParticipantList.value = participants
+    this.ParticipantList.value = participants.map(participant => ({ ...participant, score: 0 }));
     this.QuestionData.value = QuestionData
     console.log(this.ParticipantList.value)
     console.log(this.QuestionData.value)
@@ -84,11 +84,33 @@ export default class InGameSocket {
       console.log(JSON.parse(message.body))
       const newAnswer = JSON.parse(message.body)
       this.answer.value = newAnswer
+
+      let foundIndex = -1;
+
+      // ParticipantList에서 userId가 newAnswer의 userId와 동일한 요소를 찾기
+      this.ParticipantList.value.forEach((participant, index) => {
+          if (participant.userId === newAnswer.userId) {
+              foundIndex = index;
+          }
+      });
+  
+      // 찾은 요소가 있다면 score 업데이트
+      if (foundIndex !== -1) {
+          // 해당 사용자의 score를 업데이트
+          this.ParticipantList.value[foundIndex].score += newAnswer.score;
+      } else {
+          console.error('User not found in ParticipantList');
+      }
+
+
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/time-out`, message => {
       console.log(JSON.parse(message.body))
       const newAnswer = JSON.parse(message.body)
       this.answer.value = newAnswer
+
+      
+      
     });
     this.stompClient?.subscribe(`/topic/quiz-room/${this.quizRoomId}/finish`, message => {
       console.log(JSON.parse(message.body))

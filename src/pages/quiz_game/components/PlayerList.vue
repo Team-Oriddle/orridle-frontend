@@ -1,7 +1,7 @@
 <template>
   <section class="flex items-end gap-4 mt-8 space-y-4 justify-evenly">
     <div
-      v-for="player in user"
+      v-for="player in socket.ParticipantList"
       :key="player.id"
       class="flex flex-col items-center"
     >
@@ -21,48 +21,27 @@
       <!-- 닉네임과 점수 -->
       <div class="mt-2 font-semibold text-center">{{ player.nickname }}</div>
       <div class="text-sm">{{ player.score }}점</div>
-    </div>
+    </div>  
   </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import InGameSocket from '../../../socket/inGameChatSocket';
 
 export default defineComponent({
   name: 'PlayerList',
   props:{
-    user:{
-      type: Array,
-      required:true
+    socket:{
+      type:InGameSocket,
+      required: true,
     }
   }
   ,
   setup(props) {
-    const players = ref([
-      {
-        id: 1,
-        name: 'Player1',
-        score: 100,
-        avatarUrl: 'https://source.unsplash.com/random/100x100',
-        message: '정답이 뭘까요?',
-      },
-      {
-        id: 2,
-        name: 'Player2',
-        score: 150,
-        avatarUrl: 'https://source.unsplash.com/random/100x100',
-        message: '',
-      },
-      // 추가 플레이어 데이터
-    ]);
     console.log('시발')
+    console.log(props.socket.ParticipantList)
 
-    console.log(props.user)
-
-
-    return {
-      players,
-    };
   },
 });
 </script>
